@@ -1,0 +1,549 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap&subset=cyrillic,cyrillic-ext,latin-ext" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <!-- <div class="step__header">
+            <span class="step__number">
+                1
+            </span>
+            <label class="step__title">
+                Выберите категорию
+            </label>
+        </div> -->
+        <div class="step__body">
+            <div class="coverLay">            
+                <div class="coverLay__square">
+                    <div class="coverLay__rectangle">
+                        <div id="coverLayDisplay" class="coverLay__display">
+                        </div>
+                        <div class="coverLay__info">
+                            <div name="coverLayName" class="coverLay__name">
+                                Трек
+                            </div>
+                            <div name="coverLaySinger" class="coverLay__singer">
+                                Исполнитель
+                            </div>
+                        </div>
+                        <div name="coverLayExtraText" class="coverLay__extraText">
+                        </div>
+                    </div>
+                </div>
+                <div class="coverLay__options">
+                    <div class="coverLay__footer">
+                        <div name="typeMaket" class="coverLay__buttons" onclick="chooseType(this);">
+                            Формат
+                        </div>
+                        <ul type="none" class="coverLay__ul">
+                            <li class="coverLay__button" value="1" onclick="onclickType(this);">А5</li>
+                            <li class="coverLay__button" value="2" onclick="onclickType(this);">А4</li>
+                            <li class="coverLay__button" value="3" onclick="onclickType(this);">А3</li>
+                        </ul>
+                    </div>
+                    <div class="coverLay__footer">
+                        <div name="typeMaket" class="coverLay__buttons" onclick="chooseType(this);">
+                            Постер
+                        </div>
+                        <ul type="none" class="coverLay__ul">
+                            <li class="coverLay__button" value="1" onclick="onclickType(this);">Прозрачный</li>
+                            <li class="coverLay__button" value="2" onclick="onclickType(this);">Заполненный</li>
+                            <li class="coverLay__button" value="3" onclick="onclickType(this);">С фоном</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="step">
+                    <form>
+                        <div class="step__track">
+                            <label class="step__label">Обложка</label>
+                            <div class="step__cover">
+                                <div id="stepCover" class="step__coverClone">
+                                    <img id="imageBlur" class="step__backgroundCover">
+                                    <img id="image" class="step__imgCover">
+                                    <button onclick="onClickScale(0);" type="button" class="step__coverButton">+</button>
+                                    <button onclick="onClickScale(1);" type="button" class="step__coverButton">-</button>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="step__loadButton" type="button" onclick="onClickLoad(this);">Загрузить обложку</button>
+                                <input style="display: none;" type="file" id="photo-upload" accept="image/*" onchange="onLoad(files);"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="step">
+                    <form class="step__track">
+                        <label class="step__label">Название трека</label>
+                        <input name="trackName" class="step__trackName" type="text" id="trackName" placeholder="Трек" oninput="onChangeTrackName(this);">
+                    </form>
+                </div>
+                <div class="step">
+                    <form class="step__track">
+                        <label class="step__label">Исполнитель</label>
+                        <input name="singer" class="step__trackName" type="text" id="trackSinger" placeholder="Исполнитель" oninput="onChangeTrackSinger(this);">
+                    </form>
+                </div>
+                <div class="step">
+                    <form class="step__track">
+                        <label class="step__label">Доп. описание</label>
+                        <input name="extraText" class="step__trackName" type="text" id="trackExtraText" placeholder="Текст" oninput="onChangeTrackExtraText(this);">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var onLoad = function(files) {
+        document.getElementById('image').onmousedown = null;
+        for (var i = 0; i < files.length; i++) {
+            var reader = new FileReader();
+            var img = document.getElementById('image');
+            reader.onload = (function(aImg) {
+                return function(e) {
+                    aImg.src = e.target.result;
+                    document.getElementById('imageBlur').src = e.target.result;
+                    aImg.style.maxWidth = '100%';
+                    aImg.style.maxHeight = '100%';
+                    aImg.style.width = null;
+                    aImg.style.height = null;
+                    aImg.style.top = null;
+                    aImg.style.left = null;
+                    cloneImgLay(aImg);
+                };
+            })(img);
+            reader.readAsDataURL(files[i]);
+        }
+
+        var moveLabel = document.getElementById('image');        
+
+
+        moveLabel.onmousedown = function(event) {
+
+            let shiftX = event.clientX - moveLabel.getBoundingClientRect().left;
+            let shiftY = event.clientY - moveLabel.getBoundingClientRect().top;
+            
+            let parentX = document.getElementById('stepCover').getBoundingClientRect().left;
+            let parentY = document.getElementById('stepCover').getBoundingClientRect().top;
+        
+            moveLabel.style.position = 'absolute';
+            
+            moveLabel.style.width = moveLabel.clientWidth;
+            moveLabel.style.height = moveLabel.clientHeight;
+            moveLabel.style.zIndex = 1000;
+
+            moveLabel.parentElement.append(moveLabel);
+            //document.body.append(moveLabel);
+
+            moveAt(event.clientX, event.clientY);
+
+            function moveAt(pageX, pageY) {
+                moveLabel.style.left = pageX - parentX - shiftX;
+                moveLabel.style.top = pageY - parentY - shiftY;
+            }
+
+            function onMouseMove(event) {
+                if (event.which == 1) {
+                    //moveAt(event.offsetX, event.offsetY);
+                    moveAt(event.clientX, event.clientY);
+                    cloneImgLay(moveLabel);
+                } else {
+                    onMouseUpImg();
+                }
+            }
+
+            var onMouseUpImg = function() {
+                let image = document.getElementById('image');
+                let widthImg = +image.style.width.slice(0, -2);
+                let heightImg = +image.style.height.slice(0, -2);
+                let parentWidth = +image.parentElement.clientWidth;
+                let parentHeight = +image.parentElement.clientHeight;
+                
+                if (image.style.top) {
+                    image.style.top.slice(0, -2) < 30 - heightImg ? image.style.top = 0 : null;
+                    image.style.top.slice(0, -2) > parentHeight - 30 ? image.style.top = image.parentElement.clientHeight - image.clientHeight : null;
+                    image.style.left.slice(0, -2) < 30 - widthImg ? image.style.left = 0 : null;
+                    image.style.left.slice(0, -2) > parentWidth - 30 ? image.style.left = image.parentElement.clientWidth - image.clientWidth : null;
+                }
+                cloneImgLay(image);
+
+                document.removeEventListener('mousemove', onMouseMove);
+                moveLabel.onmouseup = null;
+            }
+
+            moveLabel.onmouseup = onMouseUpImg;
+            
+            document.body.onmouseup = onMouseUpImg;
+
+            document.addEventListener('mousemove', onMouseMove);
+        }
+
+    
+        moveLabel.ondragstart = function() {
+            console.log('I\'m working!!!');
+            return false;
+        };
+
+        document.getElementById('imageBlur').ondragstart = function() {
+            console.log('I\'m working too!!!');
+            return false;
+        }
+    };
+
+    var cloneImgLay = function(elem) {
+        let cloneCover = document.getElementById('stepCover').cloneNode(true);
+        document.getElementById('stepCoverClone') && document.getElementById('stepCoverClone').remove(); 
+        cloneCover.childNodes.forEach(function(child) {
+            if (child.id == 'image') {
+                elem.clientWidth ? child.style.width = elem.clientWidth / 1.5 : null;
+                elem.clientHeight ? child.style.height = elem.clientHeight / 1.5 : null;
+                if (elem.style.top)
+                    child.style.top = +elem.style.top.slice(0, -2) / 1.5;
+                if (elem.style.left)
+                    child.style.left = +elem.style.left.slice(0, -2) / 1.5;
+            }
+            child.tagName === 'BUTTON' && child.remove();
+            child.id ? child.id += 'Clone': null;
+        });
+        cloneCover.id += 'Clone';
+        document.getElementById('coverLayDisplay').appendChild(cloneCover);
+    };
+
+    var chooseType = function(elem) {
+        elem.parentElement.childNodes.forEach(function(child) {
+            if (child.tagName == 'UL') {
+                child.style.display = child.style.display == 'block' ? 'none' : 'block';
+                elem.parentElement.style.height = child.style.display == 'block' ? '175px' : '40px';
+            }
+        })
+    };
+
+    var onclickType = function(elem) {
+        var typeMaket = elem.parentElement.parentElement.querySelector('[name="typeMaket"]');
+        typeMaket.innerText = elem.innerText;
+        elem.parentElement.style.display = 'none';
+    }
+
+    var onClickLoad = function(elem) {
+        elem.parentElement.getElementsByTagName('input')[0].click();
+    };
+
+    var onClickScale = function(mark) {
+        let image = document.getElementById('image');
+        if (image.style.maxWidth) {
+            image.clientWidth == image.parentElement.clientWidth ? image.style.width = image.style.maxWidth : image.style.height = image.style.maxHeight;
+            image.style.maxWidth = null;
+            image.style.maxHeight = null;
+        }
+        image.style.width = image.clientWidth * (mark == 0 ? 1.1 : 0.9) + 'px';
+        image.style.height = image.clientHeight * (mark == 0 ? 1.1 : 0.9) + 'px';
+        if (image.style.top == '0px')
+            image.style.top = null
+        if (image.style.left == '0px')
+            image.style.left = null
+        if (image.style.top)
+            image.style.top = +image.style.top.slice(0, -2) + (mark == 0 ? -image.clientHeight : image.clientHeight) * 0.05 + 'px';
+        if (image.style.left)
+            image.style.left = +image.style.left.slice(0, -2) + (mark == 0 ? -image.clientWidth : image.clientWidth) * 0.05 + 'px';
+        
+        cloneImgLay(image);
+    };
+
+    var onChangeTrackName = function(dom) {
+        document.getElementsByName('coverLayName')[0].innerHTML = dom.value;
+    };
+
+    var onChangeTrackSinger = function(dom) {
+        document.getElementsByName('coverLaySinger')[0].innerHTML = dom.value;
+    };
+    
+    var onChangeTrackExtraText = function(dom) {
+        document.getElementsByName('coverLayExtraText')[0].innerHTML = dom.value;
+    };
+
+</script>
+<style>
+    body {
+        font-family: 'Montserrat', sans-serif;
+    }
+    .header {
+        display: inline-flex;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 47px 27px;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .header__title {
+        width: 207px;
+        height: 44px;
+        color: #000;
+        font-size: 36px;
+        font-family: 'Inter', sans-serif;
+    }
+    .header__hamburger {
+        font: inherit;
+        display: inline-block;
+        overflow: visible;
+        margin: 0;
+        padding: 15px;
+        cursor: pointer;
+        color: inherit;
+        border: 0;
+        background-color: transparent;
+    }
+    .header__hamburgerBox {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 24px;
+    }
+    .header__hamburgerInner,
+    .header__hamburgerInner::before,
+    .header__hamburgerInner::after {
+        position: absolute;
+        width: 40px;
+        height: 4px;
+        border-radius: 4px;
+        background-color: #000;
+    }
+    .header__hamburgerInner::before {
+        content: "";
+        top: 10px;
+    }
+    .header__hamburgerInner::after {
+        content: "";
+        top: 20px;
+    }
+    .colorLine {
+        width: 100%;
+        height: 30px;
+        background: linear-gradient(to right, darkblue, red);
+    }
+    .container {
+        width: 100%;
+        margin: auto;
+    }
+    .step {
+        width: 100%;
+        margin: auto;
+        padding-bottom: 10px;
+    }
+    .step__header {
+        text-align: center;
+        font-size: 48px;
+        font-weight: 500;
+    }
+    .step__number {
+        color: #FF8383;
+        text-align: center;
+        font-size: 96px;
+        font-weight: 700;
+    }
+    .step__body {
+        width: 80%;
+        margin: auto;
+        display: flex;
+        justify-content: space-around;
+
+    }
+    .coverLay__ul {
+        display: none;
+        height: 40px;
+        text-align: center;
+        margin: 5px 0 auto auto;
+        font-size: 20px;
+        font-family: Montserrat, sans-serif;
+        cursor: default;
+        padding: 0;
+    }
+    .coverLay__options {
+        width: 500px;
+        display: flex;
+        justify-content: space-between;
+        margin: 5px auto;
+    }
+    .coverLay__footer {
+        width: 100%;
+    }
+    .coverLay__square {
+        width: 500px;
+        height: 500px;
+        margin: auto;
+        background-color: gray;
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+    }
+    .coverLay__rectangle {
+        width: 230px;
+        height: 400px;
+        background-image: url('spoty.png');
+        margin: auto;
+        position: relative;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+    .coverLay__display {
+        width: 200px;
+        height: 200px;
+        margin: auto;
+        overflow: hidden;
+        object-fit: cover;
+        margin: auto auto auto -4px;
+    }
+    .coverLay__info {
+        margin-top: 5px;
+        font-size: 12px;
+        font-weight: 600;
+        overflow: hidden;
+    }
+    .coverLay__name {
+        color: #FFFFFF;
+    }
+    .coverLay__singer {
+        color: lightgray;
+        font-size: 10px;
+    }
+    .coverLay__extraText {
+        width: 100%;
+        height: fit-content;
+        margin-top: 28px;
+        text-align: center;
+        font-size: 10px;
+        font-weight: 600;
+        color: lightgray;
+        overflow: hidden;
+    }
+    .coverLay__save {
+        margin: 0 auto;
+        color: #FFFFFF;
+        font-weight: 700;
+    }
+    .coverLay__buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 40px;
+        margin: auto;
+        border-width: 0px;
+        border-radius: 20px;
+        background-color: #D0DBFF;
+        font-size: 20px;
+        font-weight: 500;
+        font-family: 'Montserrat', sans-serif;
+        cursor: default;
+    }
+    .coverLay__button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 200px;
+        height: 40px;
+        margin: auto;
+        border-width: 0px;
+        border-radius: 20px;
+        background-color: #D0DBFF;
+        font-size: 20px;
+        font-weight: 500;
+        font-family: 'Montserrat', sans-serif;
+    }
+    .step__track {
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .step__label {
+        text-align: center;
+        font-size: 20px;
+        font-weight: 500;
+    }
+    .step__trackName {
+        width: 100%;
+        border-width: 0;
+        border-radius: 30px;
+        padding: 20px;
+        background: #D9D9D9;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 20px;
+        font-weight: 500;
+    }
+    .step__cover {
+        width: 300px;
+        height: 300px;
+    }
+    .step__coverClone {
+        width: 100%;
+        height: 100%;
+        background: #D9D9D9;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .step__backgroundCover {
+        width: 120%;
+        height: 120%;
+        object-fit: cover;
+        filter: blur(14px);
+        position: absolute;
+    }
+    .step__imgCover {
+        object-fit: contain;
+        position: absolute;
+    }
+    .step__coverButton {
+        width: 40px;
+        height: 40px;
+        margin: 5px;
+        border-width: 0;
+        border-radius: 20px;
+        background-color: #FFF;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 30px;
+        font-weight: 600;
+        z-index: 9999;
+        align-self: flex-start;
+        opacity: 0.6;
+    }
+    .step__loadButton {
+        width: 250px;
+        height: 35px;
+        margin-top: 20px;
+        color: #FFFFFF;
+        background-color: #577CFF;
+        text-align: center;
+        font-size: 20px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        border-width: 0;
+        border-radius: 40px;
+    }
+
+    @media screen and (max-width: 1150px) {
+        .coverLay__square {
+            width: 400px;
+            height: 400px;
+        }
+        .coverLay__options {
+            width: 400px;
+        }
+    }
+    @media screen and ((max-width: 1024px) or (orientation: portrait)) {
+        .step__body {
+            flex-direction: column;
+        }
+    }
+</style>
+</html>
