@@ -1,1 +1,118 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap&subset=cyrillic,cyrillic-ext,latin-ext" rel="stylesheet"/>
+    <link rel="stylesheet" href="styles/style.css" />
+    <title>Document</title>
+</head>
+    <body>
+        <div class="container">
+            <!-- <div class="step__header">
+                <span class="step__number">
+                    1
+                </span>
+                <label class="step__title">
+                    Выберите категорию
+                </label>
+            </div> -->
+            <div class="step__body">
+                <div class="coverLay">            
+                    <div class="coverLay__square">
+                        <div class="coverLay__rectangle">
+                            <img src="styles/img/tempImg.png" width="100%">
+                            <div name="coverLayExtraText" class="coverLay__extraText">
+                            </div>
+                            <div id="coverLayDisplay" class="coverLay__display">
+                            </div>
+                            <div class="coverLay__info">
+                                <div name="coverLayName" class="coverLay__name">
+                                    Трек
+                                </div>
+                                <div name="coverLaySinger" class="coverLay__singer">
+                                    Исполнитель
+                                </div>
+                            </div>
 
+                        </div>
+                    </div>
+                    <div class="coverLay__options">
+                        <div class="coverLay__footer">
+                            <div name="typeMaket" class="coverLay__buttons" onclick="chooseType(this);">
+                                Формат
+                            </div>
+                            <ul type="none" class="coverLay__ul">
+                                <li class="coverLay__button" value="1" onclick="onClickType(this);">А5</li>
+                                <li class="coverLay__button" value="2" onclick="onClickType(this);">А4</li>
+                                <li class="coverLay__button" value="3" onclick="onClickType(this);">А3</li>
+                            </ul>
+                        </div>
+                        <div class="coverLay__footer">
+                            <div name="typeMaket" class="coverLay__buttons" onclick="chooseType(this);">
+                                Постер
+                            </div>
+                            <ul type="none" class="coverLay__ul">
+                                <li class="coverLay__button" value="1" onclick="onClickType(this);">Прозрачный</li>
+                                <li class="coverLay__button" value="2" onclick="onClickType(this);">Заполненный</li>
+                                <li class="coverLay__button" value="3" onclick="onClickType(this);">С фоном</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="step">
+                        <form>
+                            <div class="step__track">
+                                <label class="step__label">Обложка</label>
+                                <div class="step__cover">
+                                    <div id="stepCover" class="step__coverClone">
+                                        <img id="imageBlur" class="step__backgroundCover">
+                                        <img id="image" class="step__imgCover">
+                                        <button onclick="onClickScale(0);" type="button" class="step__coverButton">+</button>
+                                        <button onclick="onClickScale(1);" type="button" class="step__coverButton">-</button>
+                                        <div id="navPanel" class="navPanel">
+                                            <div class="navPanel__button"></div>
+                                            <img id="navUp" src="styles/img/Arrow.png" class="navPanel__button navPanel__button_up"></img>
+                                            <div class="navPanel__button"></div>
+                                            <img id="navLeft" src="styles/img/Arrow.png" class="navPanel__button navPanel__button_left"></img>
+                                            <div id="navCenter" class="navPanel__button navPanel__button_center"></div>
+                                            <img id="navRight" src="styles/img/Arrow.png" class="navPanel__button navPanel__button_right"></img>
+                                            <div class="navPanel__button"></div>
+                                            <img id="navDown" src="styles/img/Arrow.png" class="navPanel__button navPanel__button_down"></img>
+                                            <div class="navPanel__button"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button class="step__loadButton" type="button" onclick="onClickLoad(this);">Загрузить обложку</button>
+                                    <input style="display: none;" type="file" id="photo-upload" accept="image/*" onchange="onLoad(files);"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="step">
+                        <form class="step__track">
+                            <label class="step__label">Название трека</label>
+                            <input name="trackName" class="step__trackName" type="text" id="trackName" placeholder="Трек" oninput="onChangeTrackName(this);">
+                        </form>
+                    </div>
+                    <div class="step">
+                        <form class="step__track">
+                            <label class="step__label">Исполнитель</label>
+                            <input name="singer" class="step__trackName" type="text" id="trackSinger" placeholder="Исполнитель" oninput="onChangeTrackSinger(this);">
+                        </form>
+                    </div>
+                    <div class="step">
+                        <form class="step__track">
+                            <label class="step__label">Доп. описание</label>
+                            <input name="extraText" class="step__trackName" type="text" id="trackExtraText" placeholder="Текст" oninput="onChangeTrackExtraText(this);">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="script.js"></script>
+        <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
+    </body>
+</html>
